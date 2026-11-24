@@ -1,0 +1,107 @@
+cmc growth store v2.0.0 — fresh deployment, separate from the old one
+zip built 2026-11-24 from the verified working tree (fixes from 2026-11-24
+included: product page import fix, tailwind removed). this becomes a NEW
+github repo and a NEW vercel project with its own url. the old
+conscious-mind-concepts.vercel.app deployment is not touched.
+follow one step at a time, paste me the result, wait for my go before the
+next one.
+
+WHAT YOU NEED BEFORE STARTING
+- node.js 18.18 or newer (checked in step 2)
+- supabase account (free tier fine)
+- github account
+- vercel account (sign in with github is easiest)
+- your ozow site code, private key and api key from admin.ozow.com
+- git for windows (git-scm.com, default options). if a command says git is
+  not recognized, install it, reopen CMD, repeat that command.
+
+STEP 1 — unpack
+1. download cmc-growth-store.zip from the card in this chat (lands in Downloads).
+2. in CMD paste:
+   cd %USERPROFILE%\Downloads && tar -xf cmc-growth-store.zip && dir cmc-growth-store
+   if tar is not recognized, use this instead:
+   powershell -command "Expand-Archive cmc-growth-store.zip -DestinationPath ."
+3. expected: a folder listing including app, components, lib, scripts, supabase.
+
+STEP 2 — check node
+   node -v
+expected: v18.18+ / v20+ / v22+. if not recognized: install the LTS from
+nodejs.org, reopen CMD, repeat.
+
+STEP 3 — install dependencies and verify
+   cd %USERPROFILE%\Downloads\cmc-growth-store && npm install && npm run verify
+expected: "added N packages", then every verify check green. paste me the
+last lines if anything is red.
+
+STEP 4 — supabase (browser, new project for the new store)
+4.1 supabase.com, new project: name cmc-growth-store, region eu-west-1 or
+    eu-central-1. keep the db password somewhere safe.
+4.2 sql editor: paste all of supabase\migrations\0001_init.sql, run. expected success.
+4.3 sql editor: paste all of supabase\migrations\0002_seed.sql, run. expected success.
+4.4 project settings, api: copy the project url and the service_role key
+    (the secret one, never the anon key). you need both in step 7.
+
+STEP 5 — github repo (NEW repo, do not reuse the old one)
+5.1 github.com, new repository: name Conscious-Mind-Concepts-Store, private,
+    do NOT tick readme / gitignore / license. create.
+5.2 in CMD, one line at a time:
+   cd %USERPROFILE%\Downloads\cmc-growth-store
+   git init
+   git add .
+   git commit -m "cmc-growth-store v2.0.0 fresh deployment"
+expected: a commit line listing files.
+
+STEP 6 — push (github username OGgrove420 already filled in, one paste)
+   git remote add origin https://github.com/OGgrove420/Conscious-Mind-Concepts-Store.git && git branch -M main && git push -u origin main
+a browser window opens for github sign-in, accept it.
+expected: "Branch 'main' set up to track 'origin/main'."
+
+STEP 7 — vercel (browser)
+7.1 vercel.com, add new, project, import Conscious-Mind-Concepts-Store.
+    framework auto-detects next.js. vercel gives the project its own new
+    url — write it down, it replaces the old one everywhere below.
+7.2 before deploying, environment variables, add for all environments:
+    SUPABASE_URL         = project url from 4.4
+    SUPABASE_SERVICE_KEY = service_role key from 4.4
+    SESSION_SECRET       = e574c4a59031f44f482b8d0973da8d2750da4b12064985ffca5c7ade3e20607c
+    OZOW_PRIVATE_KEY     = from admin.ozow.com
+    OZOW_API_KEY         = from admin.ozow.com
+    SITE_URL             = the new vercel url from 7.1
+    MAIN_SITE_URL        = the new vercel url from 7.1
+    smtp optional: skip for now. without it fulfilment emails log to mail_log
+    and downloads stay available in the buyer's library.
+    (want your own session secret instead of the one above? ask, i'll generate one.)
+7.3 deploy. expected: build succeeded.
+7.4 project settings, domains: note the exact url vercel assigned
+    (something like conscious-mind-concepts-store.vercel.app). tell it to me.
+
+STEP 8 — fix the url env vars (browser, quick)
+once you know the exact url from 7.4: project settings, environment
+variables, edit SITE_URL and MAIN_SITE_URL to that exact url, save, then
+deployments tab, redeploy the latest one. expected: build succeeded again.
+this matters: SITE_URL is baked into checkout and ozow callbacks, wrong url
+breaks payment redirects.
+
+STEP 9 — admin user (browser, once)
+open https://<the new url>/admin/setup and create your admin account. the
+page locks itself forever after the first admin exists.
+
+STEP 10 — ozow (test mode first)
+10.1 admin.ozow.com: set the notify url to
+     https://<the new url>/api/ozow/notify
+10.2 store admin, settings: paste your ozow site code. keep test mode ON.
+
+STEP 11 — test checklist before going live
+- store loads on the NEW url, styles correct
+- add to cart works, totals in ZAR, LAUNCH10 takes 10% off
+- checkout creates an order and reaches pay.ozow.com (test mode)
+- success / cancel / error land right, order status page honest
+- one live R1: order flips PAID, entitlements created, download works,
+  download limit respected, replayed notify does not double-fulfil
+- newsletter signup delivers freebies only once their pdf is uploaded
+- publishing a product without a file stays blocked
+- old deployment still loads on the old url, untouched
+
+stuck anywhere: paste the exact output here, i fix it from my side.
+built and zipped by kiddie #5371, 2026-11-24, from the verified store tree.
+verify suite 102/102 green 2026-11-24; all working-tree fixes are in this zip.

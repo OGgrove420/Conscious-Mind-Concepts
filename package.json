@@ -1,0 +1,26 @@
+{
+  "name": "cmc-growth-store",
+  "version": "2.0.0",
+  "private": true,
+  "description": "CMC Growth Store — Next.js on Vercel + Supabase. Port of the PHP/SQLite build (v1.3.0); behaviour parity is the requirement.",
+  "scripts": {
+    "dev": "next dev -p 3100",
+    "build": "next build",
+    "start": "next start -p 3100",
+    "verify": "node scripts/verify.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "next": "^15.3.0",
+    "nodemailer": "^6.9.14",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/nodemailer": "^6.4.15",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.6.0"
+  }
+}
