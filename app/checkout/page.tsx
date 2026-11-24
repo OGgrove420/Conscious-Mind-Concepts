@@ -56,12 +56,3 @@ export default async function CheckoutPage({
   );
 }
 
-export function DiscountNote({ discount, code }: { discount: number; code: string }) {
-  if (!discount) return null;
-  return (
-    <div className="row">
-      <span>Discount ({code})</span>
-      <span style={{ color: "#067647" }}>-{zarCents(discount)}</span>
-    </div>
-  );
-}
