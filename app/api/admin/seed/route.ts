@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { sb } from "@/lib/db";
 import { getAdmin } from "@/lib/session";
-import { saveSetting } from "@/lib/settings";
 import { slugify } from "@/lib/format";
 
 export async function POST(req: Request) {
@@ -93,5 +92,3 @@ export async function PUT(req: Request) {
   if (!(await getAdmin())) return NextResponse.json({ error: "unauthorised" }, { status: 401 });
   return NextResponse.json({ error: "use POST /api/admin/settings with form fields" }, { status: 400 });
 }
-
-export { saveSetting };
