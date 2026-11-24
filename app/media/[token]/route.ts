@@ -55,5 +55,3 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ toke
   headers.set("Accept-Ranges", "bytes");
   return new NextResponse(upstream.body, { status: upstream.status, headers });
 }
-
-export { VERB };
